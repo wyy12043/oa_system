@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
+    <script type="text/javascript" src="easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="easyui/locale/easyui-lang-zh_CN.js"></script>
+</head>
+<script type="text/javascript">
+    $(function () {
+//        debugger;
+        initData();
+
+        $('#saveBtn').click(function () {
+            debugger;
+            var str = '';
+            $.ajax({
+                url:'/opt/getOptByRole.action',
+                type:'post',
+                async:false,
+                dataType:'json',
+                success:function (data) {
+//                    $.each(data,function (i, v) {
+                    for(var i = 0 ; i < data.length; i++ ){
+                        var v =data[i];
+                        debugger;
+                        if(v.name == "保存用户"){
+                            str += '<p title="'+v.action+'">'+v.action+'</p>'
+//                            var url_value = $("p:first").html();
+                            //form 表单异步提交
+                            $('#userForm').form('submit', {
+                                url:v.action,
+                                onSubmit: function(){
+
+                                },
+                                success:function(data){
+                                    $('#userAdd').dialog('close');
+                                    $.messager.alert('信息',data);
+                                    $('#userlist').datagrid('reload');
+                                }
+                            });
+                            break;
+                        } else{
+//                            for (var j = 0 ; j < pc.list.length; j++ ) {
+//
+//                            }
+
+                            debugger;
+                            $.messager.alert('信息','你没有保存的权限');
+                            $('#userAdd').dialog('close');
+                        }
+                    }
+
+                    if(data.length == 0 ){
+                        $.messager.alert('信息','你没有保存的权限');
+                        $('#userAdd').dialog('close');
+                    }
+
+                        console.log(str);
+//                    })
+
+                },
+                error:function () {
+                    alert("数据传输错误");
+                    $('#userAdd').dialog('close');
+
+                }
+
+            });
+
+
+
+        })
+    })
+
+    function initData(){
+
+        $('#userlist').datagrid({
+
+//            url: '/user/getAll.action',
+            url:'/user/getPage.action',
+            /*整个填充*/
+            fitColumns:true,
+            //只能选单行
+//            singleSelect:true,
+            //整个居中
+            fit:true,
+            columns:[[
+                {field:'',title:'',width:50,align:"center",checkbox:true},
+                /*filed 和结果对应,title: 表头, 居中显示*/
+                {field:'id',title:'ID',width:100,align:"center"},
+                {field:'username',title:'用户名',width:100,align:"center"},
+                {field:'password',title:'密码',width:100,align:"center"},
+                {field:'birthday',title:'生日',width:100,align:'center'},
+                {field:'sex',title:'性别',width:100,align:'center',
+                    formatter: function(value,row,index){
+                        if (value == '1'){
+                            return '男';
+                        } else if (value == '2'){
+                            return '女';
+                        }
+                    }
+                },
+                {field:'from',title:'籍贯',width:100,align:'center',
+                    //籍贯为4标红
+                    styler: function(value,row,index){
+                        if (value == '4'){
+                            return 'color:red;';
+                        }
+                    }
+                },
+                {field:'realName',title:'真实姓名',width:100,align:'center'}
+            ]],
+            toolbar: [{
+                iconCls: 'icon-edit',
+                text:'修改',
+                handler: function(){
+                    var sel = $('#userlist').datagrid('getSelections');
+                    if (sel.length != 1){
+                        $.messager.alert('信息','请选择一条记录进行修改');
+                    }else {
+                        var u = sel[0]
+
+                        $('#userForm').form('load',{
+                            id:u.id,
+                            username:u.username,
+                            password:u.password,
+                            birthday:u.birthday,
+                            sex:u.sex,
+                            from:u.from,
+                            realName:u.realName,
+                        });
+                        $('#userAdd').dialog('open');
+                    }
+
+                }
+            },'-',{
+                iconCls: 'icon-help',
+                text:'删除',
+                handler: function(){
+                    var sel = $('#userlist').datagrid('getSelections');
+                    if (sel.length == 0){
+                        $.messager.alert('信息','请至少选择一条记录进行删除');
+                    }else {
+                        $.messager.confirm('确认','您确认想要删除记录吗？',function(r){
+                            if (r){
+                                var ids = '';
+                                for (var i = 0; i <sel.length  ;i++){
+                                    ids += sel[i].id + ',';//2，5，6
+                                }
+                                $.ajax({
+
+                                    url:'/user/delete.action',
+                                    data:{ids:ids},
+                                    success:function (data) {
+                                        $.messager.alert('信息',data);
+                                        $('#userlist').datagrid('reload');
+                                    }
+                                })
+
+                            }
+                        });
+
+
+
+                    }
+                }
+            },'-',{
+                iconCls: 'icon-add',
+                text:'添加',
+                handler: function(){
+                    debugger;
+                    //显示之前情况数据
+                    $('#userForm').form('clear');
+                    //显示添加用户表单
+                    $('#userAdd').dialog('open');
+                }
+            },'-',{
+                text:'<input class="easyui-textbox" style="width: 120px">'
+            },'-',{
+                iconCls: 'icon-search',
+                text:'查找',
+                handler: function(){
+                }
+            },'-',{
+                iconCls: 'icon-man',
+                text:'分配角色',
+                handler: function(){
+                    $('#userRole').dialog('open');  // open a window
+                }
+            }],
+            pagination:true,
+            pagePosition:'bottom',
+            //提交到后台名字叫page
+            pageNumber:1,  //page
+            //提交到后台名字叫rows
+            pageSize:3,   //rows
+            //pageList第一个数要写pageSize的数
+            pageList:[3,10,15,20]
+        });
+
+    }
+
+    function saveRole(){
+
+        var sel = $('#userlist').datagrid('getSelections');
+        var ids = '' ;
+        var roleid = $('#roleCombox').combobox('getValue');
+        alert(roleid);
+        if(sel.length == 0){
+            $.messager.alert('信息','请至少选择一个用户进行分配');
+        }else{
+            for(var i = 0;i<sel.length;i++){
+                ids += sel[i].id + ',' ; // 2,5,6,
+            }
+            $.ajax({
+                url:'/user/saveRole.action',
+                data:{
+                    ids:ids,
+                    roleid:roleid
+                },
+                success:function(data){
+                    $('#userRole').dialog('close');
+                    $.messager.alert('信息',data);
+                    $('#userlist').datagrid('reload');
+                }
+            })
+        }
+    }
+</script>
+<body>
+
+    <table id="userlist"></table>
+    <div id="userAdd" class="easyui-dialog" title="添加用户" style="width:500px;height:200px;"
+         data-options="iconCls:'icon-save',resizable:false,modal:true,closed:true">
+
+    <!--添加用户的表单-->
+    <form id="userForm" method="post" style="margin: 8px">
+        <input type="hidden" name="id">
+        <table>
+            <tr>
+                <td><label for="username">用户名:</label></td>
+                <td><input class="easyui-textbox" type="text" name="username" data-options="required:true" /></td>
+                <td><label for="password">密码:</label></td>
+                <td><input class="easyui-textbox" type="password" name="password" data-options="required:true" /></td>
+            </tr>
+            <tr>
+                <td><label for="sex">性别:</label></td>
+                <td><input type="radio" name="sex" value="1" />男<input type="radio" name="sex" value="2" />女</td>
+                <td><label for="birthday">生日:</label></td>
+                <td><input class="easyui-datebox" type="text" name="birthday"  data-options="required:true" /></td>
+            </tr>
+            <tr>
+                <td><label for="from">籍贯:</label></td>
+                <td><select id="cc" class="easyui-combobox" name="from" style="width:200px;">
+                <option value="1">北京</option>
+                <option value="2">陕西</option>
+                <option value="3">湖北</option>
+                <option value="4">四川</option>
+                <option value="5">内蒙古</option>
+            </select> </td>
+                <td><label for="realName">真实姓名:</label></td>
+                <td><input class="easyui-textbox" type="text" name="realName" data-options="required:true" /></td>
+
+            </tr>
+            <tr>
+                <td colspan="4" align="center">
+                    <a id="saveBtn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" style="margin-top:10px">保存</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+    </div>
+
+    <div id="userRole" class="easyui-dialog" title="分配角色" style="width:260px;height:160px;"
+         data-options="iconCls:'icon-save',resizable:false,modal:true,closed:true,
+        	buttons:[{
+				text:'保存',
+				handler:function(){
+					saveRole();
+				}
+				},{
+					text:'关闭',
+					handler:function(){
+
+					}
+				}]">
+
+        <div style="margin-top:20px" id="roleCombox" class="easyui-combobox" name="userrole"
+             data-options="valueField:'id',textField:'roleName',url:'/role/getAll.action'" ></div>
+
+    </div>
+
+
+</body>
+</html>

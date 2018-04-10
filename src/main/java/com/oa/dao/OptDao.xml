@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oa.dao.OptDao">
+	<select id="getAll"  resultType="opt">
+		select * from opt
+	</select>
+
+	<select id="getOptByRole" resultType="opt">
+		<if test="value == 1">
+			select * from opt
+		</if>
+		<if test="value != 1">
+			select opt.* from opt RIGHT  JOIN (select * from role_opt where role_id = #{id}) t
+			on opt.id = t.opt_id
+		</if>
+
+	</select>
+
+
+</mapper>

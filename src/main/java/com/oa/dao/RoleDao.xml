@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oa.dao.RoleDao">
+    <select id="getAll"  resultType="role">
+        select * from role where id != 1
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from role where id != 1
+    </select>
+
+    <select id="getPage" parameterType="map" resultType="role">
+        select * from role limit #{start},#{end}
+    </select>
+
+    <insert id="savePerm" parameterType="int">
+        insert into role_menu values(null,#{param1},#{param2})
+    </insert>
+
+</mapper>

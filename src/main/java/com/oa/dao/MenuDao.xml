@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oa.dao.MenuDao">
+	<select id="getAll"  resultType="menu">
+		select * from menu
+	</select>
+
+	<select id="getMenuByRole" resultType="menu">
+		<if test="value == 1">
+			select * from menu
+		</if>
+		<if test="value != 1">
+			select menu.* from menu RIGHT  JOIN (select * from role_menu where role_id = #{id}) t
+			on menu.id = t.menu_id
+		</if>
+
+	</select>
+
+
+</mapper>

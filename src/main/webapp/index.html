@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+<link rel="stylesheet" type="text/css" href="easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
+<script type="text/javascript" src="easyui/jquery.min.js"></script>
+<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="easyui/locale/easyui-lang-zh_CN.js"></script>
+
+</head>
+<script type="text/javascript" >
+    var str = '';
+
+        $.ajax({
+            url:'/menu/getMenu.action',
+            type:'post',
+            async:false,
+            dataType:'json',
+            success:function (data) {
+
+                $.each(data,function (i, v) {
+                    str += '<div title="'+v.text+'">'
+                    $.each(v.children,function (index,value) {
+                        str += '<p title="'+value.url+'" onclick="addTab(this)">'+value.text+'</p>'
+                    })
+                    str += '</div>'
+                    console.log(str);
+                })
+
+            }
+        })
+
+/*        $('#aa').accordion('add', {
+            title: '新标题',
+            content: '新内容',
+            selected: false
+        });*/
+
+//    添加面板
+    function addTab(obj) {
+        var name = $(obj).html();
+        var url = $(obj).attr("title");
+
+        //判断指定的选项卡是否存在，如果存在 就选中，如果不存在就添加一个。
+        if($('#tt').tabs('exists',name)){
+            $('#tt').tabs('select',name)
+        }else {
+            $('#tt').tabs('add',{
+                title:name,
+                content:'<iframe src="'+url+'" width="97%" height="350px"></iframe>',
+                closable:true,
+            });
+        }
+    }
+</script>
+<body>
+<script src="http://open.sojson.com/common/js/canvas-nest.min.js" count="200" zindex="-2" opacity="0.5" color="47,135,193" type="text/javascript">
+</script>
+<div id="cc" class="easyui-layout" style="width:1000px;height:550px; margin: auto">
+    <div data-options="region:'north',title:''" style="height:80px;">
+        <h2 align="center">管理系统</h2>
+    </div>
+    <div data-options="region:'south',title:''," style="height:50px;">
+        <h5 align="center">版权</h5>
+    </div>
+    <div data-options="region:'west',title:'菜单',split:false" style="width:120px;">
+        <div id="aa" class="easyui-accordion">
+            <!--使用jquery动态添加-->
+            <!--<div title="系统管理" style="overflow:auto;padding:10px;">-->
+                <!--<p>角色管理</p>-->
+                <!--<p>菜单管理</p>-->
+                <!--<p>权限管理</p>-->
+            <!--</div>-->
+        </div>
+    </div>
+    <!--页面主体部分-->
+    <div data-options="region:'center',title:'center'" style="padding:5px;background:#eee;">
+        <div id="tt" class="easyui-tabs" >
+
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('#aa').html(str);
+</script>
+</body>
+</html>

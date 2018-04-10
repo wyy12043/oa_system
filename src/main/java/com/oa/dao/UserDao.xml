@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oa.dao.UserDao">
+    <select id="getAll" resultType="user">
+            SELECT * FROM USER
+        </select>
+
+    <select id="login" resultType="user" parameterType="map">
+        select user.*,r.role_id roleId from user LEFT join role_user r
+		on user.id = r.user_id
+		where username = #{username} and password = #{password}
+    </select>
+
+    <select id="find" resultType="user" parameterType="user">
+
+        select * from user
+        <where>
+            <if test="username != null and username !=''">
+                and username = #{username}
+            </if>
+            <if test="password != null and password !=''">
+                and password = #{password}
+            </if>
+        </where>
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT COUNT(*) FROM USER
+    </select>
+
+    <select id="getPage" parameterType="map" resultType="user">
+        SELECT * FROM USER limit #{start},#{end}
+    </select>
+    <!--当前时间的函数now()-->
+    <insert id="insert" parameterType="user">
+        INSERT INTO USER VALUES (NULL ,#{username},#{password},#{birthday},#{sex},#{from},#{realName},now())
+    </insert>
+    <update id="update" parameterType="user">
+        UPDATE USER SET username = #{username},
+                        password = #{password},
+                         birthday = #{birthday},
+                         sex = #{sex},
+                         `from` = #{from},
+                         realName = #{realName} WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM  USER WHERE id = #{id}
+    </delete>
+
+    <insert id="saveRole" parameterType="map">
+        insert into role_user values(null,#{roleid},#{userid})
+    </insert>
+</mapper>
