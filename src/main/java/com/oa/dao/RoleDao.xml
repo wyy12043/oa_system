@@ -12,11 +12,22 @@
     </select>
 
     <select id="getPage" parameterType="map" resultType="role">
-        select * from role limit #{start},#{end}
+        select * from role where id != 1 limit #{start},#{end}
     </select>
 
     <insert id="savePerm" parameterType="int">
         insert into role_menu values(null,#{param1},#{param2})
     </insert>
+
+    <insert id="insert" parameterType="user">
+        INSERT INTO role VALUES (NULL ,#{roleName})
+    </insert>
+    <update id="update" parameterType="user">
+        UPDATE role SET roleName = #{roleName} WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM  role WHERE id = #{id}
+    </delete>
 
 </mapper>

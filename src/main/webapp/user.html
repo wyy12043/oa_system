@@ -26,8 +26,10 @@
 //                    $.each(data,function (i, v) {
                     for(var i = 0 ; i < data.length; i++ ){
                         var v =data[i];
+                        var f = 0;
                         debugger;
                         if(v.name == "保存用户"){
+                            f = 1 ;
                             str += '<p title="'+v.action+'">'+v.action+'</p>'
 //                            var url_value = $("p:first").html();
                             //form 表单异步提交
@@ -43,15 +45,16 @@
                                 }
                             });
                             break;
-                        } else{
-//                            for (var j = 0 ; j < pc.list.length; j++ ) {
-//
-//                            }
-
-                            debugger;
-                            $.messager.alert('信息','你没有保存的权限');
-                            $('#userAdd').dialog('close');
                         }
+//                        else{
+//                            debugger;
+//                            $.messager.alert('信息','你没有保存的权限');
+//                            $('#userAdd').dialog('close');
+//                        }
+                    }
+                    if (f == 0){
+                        $.messager.alert('信息','你没有保存的权限');
+                        $('#roleAdd').dialog('close');
                     }
 
                     if(data.length == 0 ){

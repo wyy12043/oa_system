@@ -44,17 +44,21 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void save(Role role) throws SQLException {
-
+        if (role.getId() == null){
+            roleDao.insert(role);
+        }else {
+            roleDao.update(role);
+        }
     }
 
     @Override
     public void update(Role role) throws SQLException {
-
+        roleDao.update(role);
     }
 
     @Override
     public void delete(int id) throws SQLException {
-
+        roleDao.delete(id);
     }
 
     @Override

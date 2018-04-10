@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oa.dao.UserDao">
     <select id="getAll" resultType="user">
-            SELECT * FROM USER
+            SELECT * FROM USER where id != 1
         </select>
 
     <select id="login" resultType="user" parameterType="map">
@@ -31,7 +31,7 @@
     </select>
 
     <select id="getPage" parameterType="map" resultType="user">
-        SELECT * FROM USER limit #{start},#{end}
+        SELECT * FROM USER where id != 1 limit #{start},#{end}
     </select>
     <!--当前时间的函数now()-->
     <insert id="insert" parameterType="user">
