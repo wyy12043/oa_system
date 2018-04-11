@@ -104,6 +104,11 @@ public class UserServiceImpl implements UserService {
 	public void save(User user) throws SQLException {
 		if (user.getId() == null){
 			userDao.insert(user);
+			//注册成功用户，拥有一个默认的角色
+			Map<String,Integer> map = new HashMap<String,Integer>();
+			map.put("userid", user.getId());
+			map.put("roleid", 3) ;
+			userDao.saveRole(map);
 		}else {
 			userDao.update(user);
 		}
