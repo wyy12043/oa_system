@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	 http://www.springframework.org/schema/aop
+	 http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+      http://www.springframework.org/schema/tx
+      http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
+
+    <!-- 事务管理器（AOP 通知 ）：-->
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <!-- 配置事务的传播特性 -->
+    <tx:advice id="txAdvice">
+        <tx:attributes>
+            <!--方法以下列get find query开头 一般查询使用只读事务。一般是service里面的方法-->
+            <!--<tx:method name="get*" read-only="true" />-->
+            <tx:method name="get*" propagation="REQUIRED" />
+            <tx:method name="delete*" propagation="REQUIRED" />
+            <tx:method name="save" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config proxy-target-class="true">
+        <!-- .*(..) 表示类里面的所有方法-->
+        <aop:advisor pointcut="execution(* com.oa.service.impl.*Service*.*(..))"
+                     advice-ref="txAdvice" />
+    </aop:config>
+
+</beans>
