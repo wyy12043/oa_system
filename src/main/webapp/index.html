@@ -32,12 +32,6 @@
             }
         })
 
-/*        $('#aa').accordion('add', {
-            title: '新标题',
-            content: '新内容',
-            selected: false
-        });*/
-
 //    添加面板
     function addTab(obj) {
         var name = $(obj).html();
@@ -58,12 +52,12 @@
 <body>
 <script src="http://open.sojson.com/common/js/canvas-nest.min.js" count="200" zindex="-2" opacity="0.5" color="47,135,193" type="text/javascript">
 </script>
-<div id="cc" class="easyui-layout" style="width:1000px;height:550px; margin: auto">
+<div id="cc" class="easyui-layout" style="width:1200px;height:550px; margin: auto">
     <div data-options="region:'north',title:''" style="height:80px;">
-        <h2 align="center">管理系统</h2>
+        <h2 align="center">OA管理系统</h2>
     </div>
     <div data-options="region:'south',title:''," style="height:50px;">
-        <h5 align="center">版权</h5>
+        <h5 align="center">Copyright © 2018-2019 第四小组 版权所有</h5>
     </div>
     <div data-options="region:'west',title:'菜单',split:false" style="width:120px;">
         <div id="aa" class="easyui-accordion">
@@ -76,7 +70,7 @@
         </div>
     </div>
     <!--页面主体部分-->
-    <div data-options="region:'center',title:'center'" style="padding:5px;background:#eee;">
+    <div data-options="region:'center',title:'详情显示'" style="padding:5px;background:#eee;">
         <div id="tt" class="easyui-tabs" >
 
         </div>
