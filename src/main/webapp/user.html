@@ -54,7 +54,7 @@
                     }
                     if (f == 0){
                         $.messager.alert('信息','你没有保存的权限');
-                        $('#roleAdd').dialog('close');
+                        $('#userAdd').dialog('close');
                     }
 
                     if(data.length == 0 ){
@@ -149,6 +149,7 @@
                         $.messager.alert('信息','请至少选择一条记录进行删除');
                     }else {
                         $.messager.confirm('确认','您确认想要删除记录吗？',function(r){
+                            debugger;
                             if (r){
                                 var ids = '';
                                 for (var i = 0; i <sel.length  ;i++){
@@ -156,12 +157,56 @@
                                 }
                                 $.ajax({
 
-                                    url:'/user/delete.action',
-                                    data:{ids:ids},
-                                    success:function (data) {
-                                        $.messager.alert('信息',data);
-                                        $('#userlist').datagrid('reload');
+
+                                    url: '/opt/getOptByRole.action',
+                                    type: 'post',
+                                    async: false,
+                                    dataType: 'json',
+                                    success: function (data) {
+//                    $.each(data,function (i, v) {
+                                        for (var i = 0; i < data.length; i++) {
+                                            var v = data[i];
+                                            var f = 0;
+                                            debugger;
+                                            if (v.name == "删除用户") {
+                                                f = 1;
+                                                var str1 = '<p title="' + v.action + '">' + v.action + '</p>'
+//                            var url_value = $("p:first").html();
+
+                                                //删除的 ajax请求
+
+
+                                                $.ajax({
+                                                    url: v.action,
+                                                    data:{ids:ids},
+                                                    success:function (data) {
+                                                        $.messager.alert('信息',data);
+                                                        $('#userlist').datagrid('reload');
+                                                    }
+                                                });
+
+
+                                                break;
+                                            }
+                                        }
+                                        if (f == 0) {
+                                            $.messager.alert('信息', '你没有删除的权限');
+                                            $('#userAdd').dialog('close');
+                                        }
+                                        if (data.length == 0) {
+                                            $.messager.alert('信息', '你没有删除的权限');
+                                            $('#userAdd').dialog('close');
+                                        }
+
+                                        console.log(str1);
+                                    },
+                                    error: function () {
+                                        alert("数据传输错误");
+                                        $('#userAdd').dialog('close');
                                     }
+
+
+
                                 })
 
                             }
