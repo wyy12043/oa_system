@@ -56,7 +56,6 @@ public class LoginFilter implements Filter {
         //一般用request.getServletContext().getContextPath();不用 request.getContextPath();servlet（项目多了不一样），
         String contextPath = request.getServletContext().getContextPath();
         String contextPath1 = request.getContextPath();
-
         String requestURI = request.getRequestURI();
 
         //首页不需要过滤
