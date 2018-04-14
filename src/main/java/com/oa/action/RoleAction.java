@@ -62,10 +62,38 @@ public class RoleAction {
     @RequestMapping("/savePerm.action")
     public @ResponseBody String savePerm(int roleid,String ids){
 
-        try {
-            String[] s = ids.split(",") ;
-            for(String id : s){
+		roleService.deletePerm(roleid);
+		try {
+			String[] s = ids.split(",") ;
+			for(String id : s){
                 roleService.savePerm(roleid, Integer.parseInt(id));
+            }
+            return "yes" ;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "no" ;
+
+        }
+
+    }
+
+    /**
+     * 保存权限
+     * @param roleid  角色ID
+     * @param ids      所有被选中的操作ＩＤ
+     * @return
+     */
+    @RequestMapping("/saveOpt.action")
+    public @ResponseBody String saveOpt(int roleid,String ids){
+
+		roleService.deleteOpt(roleid);
+		try {
+			String[] s = ids.split(",") ;
+			for(String id : s){
+				int id1 = Integer.parseInt(id);
+				if (id1 <= 5){
+					roleService.saveOpt(roleid,id1 );
+				}
             }
             return "yes" ;
         } catch (Exception e) {

@@ -2,7 +2,9 @@ package com.oa.service.impl;
 
 
 import com.oa.dao.MenuDao;
+import com.oa.dao.OptDao;
 import com.oa.model.Menu;
+import com.oa.model.Opt;
 import com.oa.service.MenuService;
 import com.oa.util.MenuTree;
 import com.oa.util.PageUtils;
@@ -19,6 +21,9 @@ public class MenuServiceImpl implements MenuService {
 
 	@Autowired
 	private MenuDao menuDao ;
+
+	@Autowired
+	private OptDao optDao;
 	
 	@Override
 	public Menu get(int id) throws SQLException {
@@ -97,10 +102,31 @@ public class MenuServiceImpl implements MenuService {
 						if(submenu.getPid() == m.getId()){
 							//判断以下,当前角色是否有相应权限,如果有,把ckecked属性设置为 true
 							for(Menu mm :roleMenuList){
-								if(mm.getId() == submenu.getId()){
+								if(mm.getId() == submenu.getId() ){
 									submenu.setChecked(true);
 								}
+
+						}
+							if (submenu.getId() == 9){
+								List<Opt> optByRole = optDao.getOptByRole(100);
+								List<Opt> optByRole1 = optDao.getOptByRole(roleid);
+								for (Opt opt : optByRole1){
+									if (opt.getId() == 3 ){
+										opt.setChecked(true);
+									}
+									if (opt.getId() == 4 ){
+										opt.setChecked(true);
+									}
+
+								}
+
+								submenu.setChildren(optByRole);
 							}
+							else if (submenu.getId() == 8){
+								List<Opt> optByRole = optDao.getOptByRole(99);
+								submenu.setChildren(optByRole);
+							}
+
 							//二级菜单
 							sublist.add(submenu) ;
 						}

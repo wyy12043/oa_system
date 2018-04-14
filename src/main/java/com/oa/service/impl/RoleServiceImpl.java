@@ -95,4 +95,19 @@ public class RoleServiceImpl implements RoleService {
     public void savePerm(int roleid, int menuid) {
         roleDao.savePerm(roleid,menuid);
     }
+
+    @Override
+    public void saveOpt(int roleid, int optid) {
+        roleDao.saveOpt(roleid,optid);
+    }
+
+    @Override
+    public void deletePerm(int roleid) {
+        roleDao.deletePerm(roleid);
+    }
+
+    @Override
+    public void deleteOpt(int roleid) {
+        roleDao.deleteOpt(roleid);
+    }
 }

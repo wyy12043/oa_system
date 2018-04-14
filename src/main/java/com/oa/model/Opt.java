@@ -6,10 +6,19 @@ package com.oa.model;
  */
 public class Opt {
     private int id ;
-    private String name ;
+    private String text ;
     private String action ;
+    private boolean checked = false;
 
-    public int getId() {
+	public boolean isChecked() {
+		return checked;
+	}
+
+	public void setChecked(boolean checked) {
+		this.checked = checked;
+	}
+
+	public int getId() {
         return id;
     }
 
@@ -17,12 +26,12 @@ public class Opt {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getText() {
+        return text;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public String getAction() {
@@ -37,7 +46,7 @@ public class Opt {
     public String toString() {
         return "Opt{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name='" + text + '\'' +
                 ", action='" + action + '\'' +
                 '}';
     }

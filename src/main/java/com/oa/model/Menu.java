@@ -1,5 +1,7 @@
 package com.oa.model;
 
+import java.util.List;
+
 public class Menu {
 	
 	private int id ;
@@ -7,6 +9,16 @@ public class Menu {
 	private int pid ;
 	private String url ;
 	private boolean checked = false;
+
+	private List<Opt> children;
+
+	public List<Opt> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<Opt> children) {
+		this.children = children;
+	}
 
 	public boolean isChecked() {
 		return checked;

@@ -19,6 +19,10 @@
         insert into role_menu values(null,#{param1},#{param2})
     </insert>
 
+    <insert id="saveOpt" parameterType="int">
+        insert into role_opt values(null,#{param1},#{param2})
+    </insert>
+
     <insert id="insert" parameterType="user">
         INSERT INTO role VALUES (NULL ,#{roleName})
     </insert>
@@ -28,6 +32,14 @@
 
     <delete id="delete">
         DELETE FROM  role WHERE id = #{id}
+    </delete>
+
+    <delete id="deletePerm">
+        DELETE FROM  role_menu WHERE role_id = #{role_id}
+    </delete>
+
+    <delete id="deleteOpt">
+        DELETE FROM  role_opt WHERE role_id = #{role_id}
     </delete>
 
 </mapper>

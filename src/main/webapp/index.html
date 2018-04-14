@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -21,16 +22,16 @@
             success:function (data) {
 
                 $.each(data,function (i, v) {
-                    str += '<div title="'+v.text+'">'
+                    str += '<div title="'+v.text+'">';
                     $.each(v.children,function (index,value) {
                         str += '<p title="'+value.url+'" onclick="addTab(this)">'+value.text+'</p>'
-                    })
-                    str += '</div>'
+                    });
+                    str += '</div>';
                     console.log(str);
                 })
 
             }
-        })
+        });
 
 //    添加面板
     function addTab(obj) {
@@ -44,7 +45,7 @@
             $('#tt').tabs('add',{
                 title:name,
                 content:'<iframe src="'+url+'" width="97%" height="350px"></iframe>',
-                closable:true,
+                closable:true
             });
         }
     }
